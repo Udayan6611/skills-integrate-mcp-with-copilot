@@ -4,6 +4,65 @@ document.addEventListener("DOMContentLoaded", () => {
   const signupForm = document.getElementById("signup-form");
   const messageDiv = document.getElementById("message");
 
+  // Example activities data
+  let activities = [
+    { name: "Chess Club", category: "Academic", time: "2025-10-01 15:00" },
+    { name: "Basketball", category: "Sports", time: "2025-10-02 16:00" },
+    { name: "Painting", category: "Arts", time: "2025-10-03 14:00" },
+    // ... more activities
+  ];
+
+  // Render activities to the DOM
+  function renderActivities(list) {
+    const container = document.getElementById("activity-list");
+    container.innerHTML = "";
+    if (list.length === 0) {
+      container.innerHTML = "<p>No activities found.</p>";
+      return;
+    }
+    list.forEach((activity) => {
+      const div = document.createElement("div");
+      div.className = "activity-card";
+      div.innerHTML = `
+        <h3>${activity.name}</h3>
+        <p>Category: ${activity.category}</p>
+        <p>Time: ${activity.time}</p>
+      `;
+      container.appendChild(div);
+    });
+  }
+
+  // Filter, sort, and search logic
+  function updateActivityList() {
+    let filtered = [...activities];
+    const search = document.getElementById("searchInput").value.toLowerCase();
+    const category = document.getElementById("categoryFilter").value;
+    const sort = document.getElementById("sortSelect").value;
+
+    // Search
+    if (search) {
+      filtered = filtered.filter(
+        (a) =>
+          a.name.toLowerCase().includes(search) ||
+          a.category.toLowerCase().includes(search)
+      );
+    }
+
+    // Filter by category
+    if (category) {
+      filtered = filtered.filter((a) => a.category === category);
+    }
+
+    // Sort
+    if (sort === "name") {
+      filtered.sort((a, b) => a.name.localeCompare(b.name));
+    } else if (sort === "time") {
+      filtered.sort((a, b) => new Date(a.time) - new Date(b.time));
+    }
+
+    renderActivities(filtered);
+  }
+
   // Function to fetch activities from API
   async function fetchActivities() {
     try {
@@ -155,6 +214,16 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  // Event listeners
+  document
+    .getElementById("searchInput")
+    .addEventListener("input", updateActivityList);
+  document
+    .getElementById("categoryFilter")
+    .addEventListener("change", updateActivityList);
+  document.getElementById("sortSelect").addEventListener("change", updateActivityList);
+
   // Initialize app
   fetchActivities();
+  renderActivities(activities);
 });

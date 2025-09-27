@@ -15,6 +15,23 @@
     <main>
       <section id="activities-container">
         <h3>Available Activities</h3>
+
+        <!-- Add this inside the <body> tag, above your activity list -->
+        <div id="activity-controls" style="margin-bottom: 1em;">
+          <input type="text" id="searchInput" placeholder="Search activities..." />
+          <select id="categoryFilter">
+            <option value="">All Categories</option>
+            <option value="Academic">Academic</option>
+            <option value="Sports">Sports</option>
+            <option value="Arts">Arts</option>
+            <!-- Add more categories as needed -->
+          </select>
+          <select id="sortSelect">
+            <option value="name">Sort by Name</option>
+            <option value="time">Sort by Time</option>
+          </select>
+        </div>
+
         <div id="activities-list">
           <!-- Activities will be loaded here -->
           <p>Loading activities...</p>
